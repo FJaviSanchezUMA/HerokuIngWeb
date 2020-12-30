@@ -2,13 +2,15 @@ from flask import Flask, request, jsonify, Response
 from flask_pymongo import PyMongo
 from bson import json_util
 from bson.objectid import ObjectId
+import pymongo
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/grafitisdb"
+##app.config["MONGO_URI"] = "mongodb://localhost:27017/grafitisdb"
+#mongo = PyMongo(app)
 
-mongo = PyMongo(app)
-
-
+url_mongo_atlas = "mongodb+srv://grafiti:12345@cluster0.qecwv.mongodb.net/grafitidb?retryWrites=true&w=majority"
+client = pymongo.MongoClient(url_mongo_atlas)
+mongo = client.get_database('grafitis')
 
 ########################  Usuario  ########################
 

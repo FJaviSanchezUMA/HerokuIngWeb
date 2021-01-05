@@ -1,11 +1,16 @@
-from flask import Flask, request, jsonify, Response 
+from flask import Flask, request, jsonify, Response, send_from_directory, send_file
 from flask_pymongo import PyMongo
 from bson import json_util
 from bson.objectid import ObjectId
-import pymongo
+from werkzeug.utils import secure_filename
+import pymongo, os
+
+UPLOAD_FOLDER = 'src'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
-##app.config["MONGO_URI"] = "mongodb://localhost:27017/grafitisdb"
+#app.config["MONGO_URI"] = "mongodb://localhost:27017/grafitisdb"
+app.config['UPLOAD_FOLDER']  = UPLOAD_FOLDER
 #mongo = PyMongo(app)
 
 url_mongo_atlas = "mongodb+srv://grafiti:12345@cluster0.qecwv.mongodb.net/grafitidb?retryWrites=true&w=majority"
@@ -246,6 +251,82 @@ def get_comentario_byGrafiti(id):
     comentario = mongo.db.comentarios.find(myquery)
     response = json_util.dumps(comentario)
     return Response(response, mimetype='application/json')
+
+
+
+########################  Media  ########################
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/media', methods=['POST'])
+def guardar_imagen():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        response = jsonify({'foto': filename})
+        return response
+    return not_found()
+
+@app.route('/media/<filename>', methods=['GET'])
+def devolver_imagen(filename):
+    return send_file(filename, as_attachment=True)
+
+
+
+
+########################  Quiz  ########################
+
+@app.route('/quiz', methods=['GET'])
+def get_quizs():
+    quizs = mongo.db.quizs.find()
+    response = json_util.dumps(quizs)
+    return Response(response, mimetype='application/json')
+
+@app.route('/quiz/<id>', methods=['GET'])
+def get_quiz(id):
+    quiz = mongo.db.quizs.find_one({'_id': ObjectId(id)})
+    response = json_util.dumps(quiz)
+    return Response(response, mimetype='application/json')
+
+@app.route('/quiz/dificultad/<dif>', methods=['GET'])
+def get_quiz_filtrado(dif):
+    myquery = { "dificultad": { '$regex': ".*" + dif + ".*" } }
+    quizs = mongo.db.quizs.find(myquery)
+    response = json_util.dumps(quizs)
+    return Response(response, mimetype='application/json')
+
+@app.route('/quiz/<id>', methods=['DELETE'])
+def delete_quiz(id):
+    mongo.db.quizs.delete_one({'_id': ObjectId(id)})
+    response = {'mensaje': 'Quiz eliminado correctamente'}
+    return response
+
+@app.route('/quiz', methods=['POST'])
+def create_quiz():
+    nombre = request.json['nombre']
+    pista = request.json['pista']
+    dificultad = request.json['dificultad']
+    direccion = request.json['direccion']
+    foto = request.json['foto']
+
+    if nombre and dificultad and pista and direccion and foto:
+        id = mongo.db.quizs.insert(
+            {'nombre': nombre, 'pista': pista, "dificultad": dificultad, 'direccion': direccion, 'foto': foto}
+        )
+        response = {
+            'id': str(id),
+            'nombre': nombre,
+            'pista': pista,
+            'dificultad': dificultad,
+            'direccion': direccion,
+            'foto': foto
+        }
+        return response
+    else: 
+        return not_found()
 
 
 

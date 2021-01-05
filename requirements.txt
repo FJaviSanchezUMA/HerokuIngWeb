@@ -4,4 +4,3 @@ Flask-Pymongo
 pymongo
 dnspython
 bson
-

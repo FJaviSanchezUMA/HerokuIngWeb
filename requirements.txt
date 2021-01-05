@@ -1,7 +1,8 @@
 gunicorn
 Flask
 Flask-Pymongo
-pymongo
-dnspython
 bson 
 Werkzeug
+pymongo
+dnspython
+

@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 import pymongo, os
 
-UPLOAD_FOLDER = 'src'
+UPLOAD_FOLDER = ""
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)

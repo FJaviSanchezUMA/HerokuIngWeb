@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 import pymongo, os
 
-UPLOAD_FOLDER = ""
+UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
@@ -84,6 +84,33 @@ def get_usuario_byNombre(nombre):
     usuario = mongo.db.usuarios.find(myquery)
     response = json_util.dumps(usuario)
     return Response(response, mimetype='application/json')
+
+@app.route('/usuarios/findByEmail/<email>', methods=['GET'])
+def get_usuario_byEmail(email):
+    myquery = { "email": email }
+    usuario = mongo.db.usuarios.find(myquery)
+    response = json_util.dumps(usuario)
+    return Response(response, mimetype='application/json')
+
+@app.route('/usuarios/login/<email>/<nombre>', methods=['GET'])
+def login(email, nombre):
+    myquery = { "email": email }
+    usuario = mongo.db.usuarios.find(myquery)
+    if usuario:
+        response = json_util.dumps(usuario)
+    else:
+        id = mongo.db.usuarios.insert(
+            {'nombre': nombre, 'email': email, 'password': 'Desconocida', 'direccion': 'Desconocida'}
+        )
+        response = {
+            'id': str(id),
+            'nombre': nombre,
+            'email': email,
+            'password': password,
+            'direccion': direccion
+        }
+    return Response(response, mimetype='application/json')
+
 
 
 

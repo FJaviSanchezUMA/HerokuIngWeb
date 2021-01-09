@@ -96,13 +96,13 @@ def get_usuario_byEmail(email):
 def login(email, nombre):
     myquery = { "email": email }
     usuario = mongo.db.usuarios.find(myquery)
-    if not usuario:
+    if usuario[0].email == email:
+        response = json_util.dumps(usuario)
+        return Response(response, mimetype='application/json')
+    else:
         mongo.db.usuarios.insert(
             {'nombre': nombre, 'email': email, 'password': 'Desconocida', 'direccion': 'Desconocida'}
         )
-    else:
-        response = json_util.dumps(usuario)
-        return Response(response, mimetype='application/json')
 
     responsee = jsonify({'mensaje': 'Usuario nuevo añadido correctamente'})
     return responsee

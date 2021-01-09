@@ -96,7 +96,7 @@ def get_usuario_byEmail(email):
 def login(email, nombre):
     myquery = { "email": email }
     usuario = mongo.db.usuarios.find(myquery)
-    if usuario:
+    if usuario[0]:
         response = json_util.dumps(usuario)
     else:
         id = mongo.db.usuarios.insert(

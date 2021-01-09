@@ -104,8 +104,8 @@ def login(email, nombre):
             'id': str(id),
             'nombre': nombre,
             'email': email,
-            'password': password,
-            'direccion': direccion
+            'password': 'Desconocida',
+            'direccion': 'Desconocida'
         }
         return response
     else:

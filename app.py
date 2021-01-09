@@ -107,7 +107,7 @@ def login(email, nombre):
             'password': password,
             'direccion': direccion
         }
-        return Response(response, mimetype='application/json')
+        return response
     else:
         response = json_util.dumps(usuario)
         return Response(response, mimetype='application/json')

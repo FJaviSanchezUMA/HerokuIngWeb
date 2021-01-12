@@ -4,6 +4,8 @@ from bson import json_util
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 import pymongo, os
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -92,8 +94,16 @@ def get_usuario_byEmail(email):
     response = json_util.dumps(usuario)
     return Response(response, mimetype='application/json')
 
-@app.route('/usuarios/login/<email>/<nombre>', methods=['GET'])
-def login(email, nombre):
+@app.route('/usuarios/login/<email>/<nombre>/<token>', methods=['GET'])
+def login(email, nombre, token):
+    try:
+        CLIENT_ID = '661567867815-mkf6bgra2bkv9qo93mleis627a39br64.apps.googleusercontent.com'
+        id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+
+    except ValueError:
+        error_response = jsonify({'Error': 'Error con el token'})
+        return error_response
+
     myquery = { "email": email }
     usuario = mongo.db.usuarios.find_one(myquery)
     if not usuario:

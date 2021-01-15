@@ -313,17 +313,16 @@ def guardar_imagen():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         path_on_cloud = "imagenes/" + filename
-        path_local = filename
-        storage.child(path_on_cloud).put(path_local)
+        storage.child(path_on_cloud).put(file)
         response = jsonify({'foto': filename})
         return response
     return not_found()
 
-@app.route('/media/<filename>', methods=['GET'])
-def devolver_imagen(filename):
-    path_on_cloud = "imagenes/" + filename
-    storage.download(path_on_cloud, filename)
-    return send_file(filename, as_attachment=True)
+@app.route('/media/<archivo>', methods=['GET'])
+def devolver_imagen(archivo):
+    path_on_cloud = "imagenes/" + archivo
+    storage.child(path_on_cloud).download(archivo)
+    return send_file(archivo, as_attachment=True)
 
 
 

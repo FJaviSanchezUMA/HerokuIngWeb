@@ -12,25 +12,14 @@ UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
+#app.config["MONGO_URI"] = "mongodb://localhost:27017/grafitisdb"
 app.config['UPLOAD_FOLDER']  = UPLOAD_FOLDER
+#mongo = PyMongo(app)
 CORS(app)
 
 url_mongo_atlas = "mongodb+srv://grafiti:12345@cluster0.qecwv.mongodb.net/grafitidb?retryWrites=true&w=majority"
 client = pymongo.MongoClient(url_mongo_atlas)
 mongo = client.get_database('grafitis')
-
-# config = {
-#     "apiKey": "AIzaSyAAOx479AO6Pd82QmzJ5f5nAGVeIzex4ic",
-#     "authDomain": "cloud-imagenes.firebaseapp.com",
-#     "projectId": "cloud-imagenes",
-#     "storageBucket": "cloud-imagenes.appspot.com",
-#     "messagingSenderId": "65945789369",
-#     "appId": "1:65945789369:web:2c5f9109c89c9db9690c68",
-#     "measurementId": "G-ZSJ5LNV7NB"
-# }
-
-#firebase = pyrebase.initialize_app(config)
-#storage = firebase.storage()
 
 ########################  Usuario  ########################
 
@@ -312,17 +301,13 @@ def guardar_imagen():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        #path_on_cloud = "imagenes/" + filename
-        #storage.child(path_on_cloud).put(file)
         response = jsonify({'foto': filename})
         return response
     return not_found()
 
-@app.route('/media/<archivo>', methods=['GET'])
-def devolver_imagen(archivo):
-    #path_on_cloud = "imagenes/" + archivo
-    #storage.child(path_on_cloud).download(archivo)
-    return send_file(archivo, as_attachment=True)
+@app.route('/media/<filename>', methods=['GET'])
+def devolver_imagen(filename):
+    return send_file(filename, as_attachment=True)
 
 
 

@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 from bson import json_util
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
-import pymongo, os, pyrebase
+import pymongo, os
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask_cors import CORS
@@ -29,8 +29,8 @@ config = {
     "measurementId": "G-ZSJ5LNV7NB"
 }
 
-firebase = pyrebase.initialize_app(config)
-storage = firebase.storage()
+#firebase = pyrebase.initialize_app(config)
+#storage = firebase.storage()
 
 ########################  Usuario  ########################
 
@@ -312,16 +312,16 @@ def guardar_imagen():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        path_on_cloud = "imagenes/" + filename
-        storage.child(path_on_cloud).put(file)
+        #path_on_cloud = "imagenes/" + filename
+        #storage.child(path_on_cloud).put(file)
         response = jsonify({'foto': filename})
         return response
     return not_found()
 
 @app.route('/media/<archivo>', methods=['GET'])
 def devolver_imagen(archivo):
-    path_on_cloud = "imagenes/" + archivo
-    storage.child(path_on_cloud).download(archivo)
+    #path_on_cloud = "imagenes/" + archivo
+    #storage.child(path_on_cloud).download(archivo)
     return send_file(archivo, as_attachment=True)
 
 

@@ -19,15 +19,15 @@ url_mongo_atlas = "mongodb+srv://grafiti:12345@cluster0.qecwv.mongodb.net/grafit
 client = pymongo.MongoClient(url_mongo_atlas)
 mongo = client.get_database('grafitis')
 
-config = {
-    "apiKey": "AIzaSyAAOx479AO6Pd82QmzJ5f5nAGVeIzex4ic",
-    "authDomain": "cloud-imagenes.firebaseapp.com",
-    "projectId": "cloud-imagenes",
-    "storageBucket": "cloud-imagenes.appspot.com",
-    "messagingSenderId": "65945789369",
-    "appId": "1:65945789369:web:2c5f9109c89c9db9690c68",
-    "measurementId": "G-ZSJ5LNV7NB"
-}
+# config = {
+#     "apiKey": "AIzaSyAAOx479AO6Pd82QmzJ5f5nAGVeIzex4ic",
+#     "authDomain": "cloud-imagenes.firebaseapp.com",
+#     "projectId": "cloud-imagenes",
+#     "storageBucket": "cloud-imagenes.appspot.com",
+#     "messagingSenderId": "65945789369",
+#     "appId": "1:65945789369:web:2c5f9109c89c9db9690c68",
+#     "measurementId": "G-ZSJ5LNV7NB"
+# }
 
 #firebase = pyrebase.initialize_app(config)
 #storage = firebase.storage()

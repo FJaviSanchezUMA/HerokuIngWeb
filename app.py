@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 import pymongo, os
 from google.oauth2 import id_token
 from google.auth.transport import requests
-#from flask_cors import CORS
+from flask_cors import CORS
 
 UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -16,8 +16,7 @@ app.config['UPLOAD_FOLDER']  = UPLOAD_FOLDER
 CORS(app)
 =======
 #mongo = PyMongo(app)
-#CORS(app)
->>>>>>> 17c1794f870dff58335310f7a66c3604328e8e3d
+CORS(app)
 
 url_mongo_atlas = "mongodb+srv://grafiti:12345@cluster0.qecwv.mongodb.net/grafitidb?retryWrites=true&w=majority"
 client = pymongo.MongoClient(url_mongo_atlas)

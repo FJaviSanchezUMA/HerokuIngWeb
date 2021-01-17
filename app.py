@@ -12,14 +12,14 @@ UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
-#app.config["MONGO_URI"] = "mongodb://localhost:27017/grafitisdb"
 app.config['UPLOAD_FOLDER']  = UPLOAD_FOLDER
-#mongo = PyMongo(app)
 CORS(app)
 
 url_mongo_atlas = "mongodb+srv://grafiti:12345@cluster0.qecwv.mongodb.net/grafitidb?retryWrites=true&w=majority"
 client = pymongo.MongoClient(url_mongo_atlas)
 mongo = client.get_database('grafitis')
+
+
 
 ########################  Usuario  ########################
 
@@ -290,6 +290,8 @@ def get_comentario_byGrafiti(id):
 
 
 ########################  Media  ########################
+
+#Para almacenar imagenes en el backend mientras se añade la parte de Cloudinary.
 
 def allowed_file(filename):
     return '.' in filename and \

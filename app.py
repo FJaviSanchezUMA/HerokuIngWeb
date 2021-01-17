@@ -14,7 +14,6 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']  = UPLOAD_FOLDER
 CORS(app)
-=======
 #mongo = PyMongo(app)
 CORS(app)
 

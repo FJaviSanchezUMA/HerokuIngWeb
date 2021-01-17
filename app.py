@@ -15,7 +15,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER']  = UPLOAD_FOLDER
 CORS(app)
 #mongo = PyMongo(app)
-CORS(app)
 
 url_mongo_atlas = "mongodb+srv://grafiti:12345@cluster0.qecwv.mongodb.net/grafitidb?retryWrites=true&w=majority"
 client = pymongo.MongoClient(url_mongo_atlas)
